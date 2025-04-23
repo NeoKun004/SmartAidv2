@@ -1,5 +1,6 @@
+# File path: src/interface/pages/test_selection.py
 import streamlit as st
-from src.utils.image_utils import dyscalc_b64, dtha_b64, dyslexie_b64
+from src.utils.image_utils import dyscalc_b64, dtha_b64, dyslexie_b64, dysgraphie_b64
 
 def show_page():
     """Display the test selection page after questionnaire"""
@@ -34,20 +35,30 @@ def show_page():
             highlight_tdah = "border: 5px solid #FFD166; box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);"
             highlight_dyscalculie = ""
             highlight_dyslexie = ""
+            highlight_dysgraphie = ""
         elif suggested_test == 'dyscalculie':
             suggestion_text = "D'après vos réponses au questionnaire, nous recommandons de commencer par le test de mathématiques."
             highlight_dyscalculie = "border: 5px solid #FFD166; box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);"
             highlight_tdah = ""
             highlight_dyslexie = ""
+            highlight_dysgraphie = ""
         elif suggested_test == 'dyslexie':
             suggestion_text = "D'après vos réponses au questionnaire, nous recommandons de commencer par le test de lecture."
             highlight_dyslexie = "border: 5px solid #FFD166; box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);"
             highlight_tdah = ""
             highlight_dyscalculie = ""
+            highlight_dysgraphie = ""
+        elif suggested_test == 'dysgraphie':
+            suggestion_text = "D'après vos réponses au questionnaire, nous recommandons de commencer par le test d'écriture."
+            highlight_dysgraphie = "border: 5px solid #FFD166; box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);"
+            highlight_tdah = ""
+            highlight_dyscalculie = ""
+            highlight_dyslexie = ""
         else:
             highlight_tdah = ""
             highlight_dyscalculie = ""
             highlight_dyslexie = ""
+            highlight_dysgraphie = ""
             suggestion_text = "D'après vos réponses au questionnaire, nous recommandons de choisir un test adapté à vos besoins."
         
         st.markdown(f"""
@@ -61,9 +72,10 @@ def show_page():
         highlight_tdah = ""
         highlight_dyscalculie = ""
         highlight_dyslexie = ""
+        highlight_dysgraphie = ""
     
-    # Afficher les options de test en trois colonnes
-    col1, col2, col3 = st.columns(3, gap="small")
+    # Afficher les options de test en quatre colonnes
+    col1, col2, col3, col4 = st.columns(4, gap="small")
     
     with col1:
         st.markdown(f"""
@@ -145,6 +157,27 @@ def show_page():
             
             # Navigate to the test
             st.session_state['page'] = 'test_dyslexie'
+            st.rerun()
+    
+    with col4:
+        st.markdown(f"""
+        <div style="background-color: rgba(255,255,255,0.7); padding: 15px; border-radius: 15px; margin: 10px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.1); {highlight_dysgraphie}">
+            <h2 style="color: #FF9E43; text-align: center;">
+                <span style="font-size: 32px;">✍️</span> 
+                Test d'Écriture
+            </h2>
+            <p style="font-size: 1.1rem; text-align: center; margin: 10px 0;">
+                Évalue les compétences en écriture et la motricité fine !
+            </p>
+            <div style="display: flex; justify-content: center; margin: 10px 0;">
+                <img src="data:image/png;base64,{dysgraphie_b64}" style="max-width: 90%; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("Commencer le test d'Écriture", key="btn_dysgraphie"):
+            # Navigate to the test
+            st.session_state['page'] = 'test_dysgraphie'
             st.rerun()
     
     # Return to home button

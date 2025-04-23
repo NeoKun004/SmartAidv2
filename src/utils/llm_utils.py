@@ -1,3 +1,4 @@
+# File path: src/utils/llm_utils.py
 import logging
 from src.llm_connector import get_llm_connector
 
@@ -215,13 +216,83 @@ def generate_dyslexie_recommendations(test_summary, total_score, max_score):
         
         return fallback
 
+def generate_dysgraphie_recommendations(test_summary, total_score, max_score):
+    """
+    Generate personalized recommendations for dysgraphie based on test results.
+    
+    Args:
+        test_summary (str): Summary of test results
+        total_score (int): Total score obtained
+        max_score (int): Maximum possible score
+        
+    Returns:
+        str: Personalized recommendations
+    """
+    # Get the LLM connector
+    llm_connector = get_llm_connector()
+    
+    try:
+        prompt = f"""
+        Tu es un expert en troubles d'apprentissage, spécialisé dans la dysgraphie. Un enfant vient de passer un test de dépistage de la dysgraphie avec les résultats suivants:
+        
+        {test_summary}
+        
+        Score total: {total_score}/{max_score}
+        
+        Génère des recommandations personnalisées pour aider cet enfant à améliorer ses compétences en écriture. Inclus:
+        1. Une évaluation du risque de dysgraphie (faible, modéré, élevé)
+        2. Des activités spécifiques adaptées à ses difficultés en motricité fine
+        3. Des conseils pour les parents et enseignants
+        4. Des stratégies d'apprentissage adaptées
+        
+        Formaté en HTML simple avec des titres, paragraphes et listes.
+        """
+        
+        # System prompt for the model
+        system_prompt = "Tu es un pédagogue spécialisé dans l'évaluation des enfants ayant des troubles d'écriture. Tu donnes des analyses bienveillantes, positives et encourageantes."
+        
+        # Call the LLM model
+        recommendations = llm_connector.generate_response(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            max_tokens=800,
+            temperature=0.7
+        )
+        
+        # Check that the response is not None or empty
+        if recommendations is None or recommendations.strip() == "":
+            logger.error("The LLM response is empty or None!")
+            return "Je n'ai pas pu générer des recommandations. Veuillez réessayer plus tard."
+        
+        return recommendations
+        
+    except Exception as e:
+        logger.error(f"Error generating dysgraphie recommendations: {str(e)}")
+        
+        # Fallback recommendations if LLM fails
+        risk_level = "élevé" if total_score / max_score < 0.5 else "modéré" if total_score / max_score < 0.8 else "faible"
+        
+        fallback = f"""
+        <h3>Évaluation du risque de dysgraphie: {risk_level}</h3>
+        <p>Basé sur les résultats du test, voici quelques recommandations:</p>
+        <ul>
+            <li>Pratiquer régulièrement des activités de motricité fine</li>
+            <li>Utiliser des supports adaptés pour l'écriture (papier quadrillé, guide-doigts)</li>
+            <li>Encourager les activités multisensorielles pour renforcer la mémoire motrice</li>
+            <li>Proposer des exercices ludiques pour améliorer la coordination main-œil</li>
+        </ul>
+        <p>Si les difficultés persistent, une consultation avec un ergothérapeute est recommandée.</p>
+        """
+        
+        return fallback
+
 def analyze_results_with_ai(test_type, responses):
     """
     Interface function to analyze test results with AI
     Used to handle various test types
     
     Args:
-        test_type (str): Type of test (dyscalculie, tdah, dyslexie)
+        test_type (str): Type of test (dyscalculie, tdah, dyslexie, dysgraphie)
         responses (dict): Test responses
         
     Returns:
@@ -254,5 +325,31 @@ def analyze_results_with_ai(test_type, responses):
         # Generate recommendations
         return generate_dyslexie_recommendations(test_summary, total_score, max_score)
     
-    # Add other test types (already implemented elsewhere)
+    elif test_type == "dysgraphie":
+        # Extract detailed results for dysgraphie
+        detailed_results = responses.get('detailed_results', {})
+        
+        # Create a summary of test results
+        test_summary = ""
+        for test_key, test_data in detailed_results.items():
+            test_name = {
+                "copie_texte": "Copie de Texte",
+                "ecriture_spontanee": "Écriture Spontanée",
+                "vitesse_endurance": "Vitesse et Endurance",
+                "graphisme_coordination": "Graphisme et Coordination Fine",
+                "lisibilite_orthographe": "Lisibilité et Orthographe"
+            }.get(test_key, test_key)
+            
+            test_summary += f"{test_name}: {test_data.get('score', 0)}/{test_data.get('max', 0)}\n"
+            if test_data.get('notes'):
+                test_summary += f"  Notes: {test_data.get('notes')}\n"
+        
+        # Calculate total score
+        total_score = sum(test_data.get("score", 0) for test_data in detailed_results.values())
+        max_score = sum(test_data.get("max", 0) for test_data in detailed_results.values())
+        
+        # Generate recommendations
+        return generate_dysgraphie_recommendations(test_summary, total_score, max_score)
+    
+    # For other test types, return None or implement similar logic
     return None

@@ -1,3 +1,4 @@
+# File path: src/utils/image_utils.py
 import os
 import base64
 from PIL import Image
@@ -75,6 +76,24 @@ if not dyslexie_b64:
 # If still no image, provide a placeholder base64
 if not dyslexie_b64:
     dyslexie_b64 = """
+    iVBORw0KGgoAAAANSUhEUgAAASwAAAD6CAYAAAAbbXrzAAAABGdBTUEAALGPC/SxoQAAAWFJREFUeJzt1DEBACAMwDDAv+dxIoEeiYK+2d0zAQL+dwMAHoYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZCzn0QJm8zHRjwAAAABJRU5ErkJggg==
+    """
+
+# Add dysgraphie image with the same pattern
+try:
+    dysgraphie_b64 = get_image_base64("/home/ubuntu/side/SmartAid/data/dysgraphie.png")
+except:
+    dysgraphie_b64 = ""
+
+if not dysgraphie_b64:
+    try:
+        dysgraphie_b64 = get_image_base64("data/dysgraphie.png")
+    except:
+        dysgraphie_b64 = ""
+
+# If still no image, provide a placeholder base64
+if not dysgraphie_b64:
+    dysgraphie_b64 = """
     iVBORw0KGgoAAAANSUhEUgAAASwAAAD6CAYAAAAbbXrzAAAABGdBTUEAALGPC/SxoQAAAWFJREFUeJzt1DEBACAMwDDAv+dxIoEeiYK+2d0zAQL+dwMAHoYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZBgWkGFYQIZhARmGBWQYFpBhWECGYQEZhgVkGBaQYVhAhmEBGYYFZCzn0QJm8zHRjwAAAABJRU5ErkJggg==
     """
 

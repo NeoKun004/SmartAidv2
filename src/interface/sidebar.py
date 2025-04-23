@@ -1,3 +1,4 @@
+# File path: src/interface/sidebar.py
 import streamlit as st
 
 def show_sidebar():
@@ -26,6 +27,17 @@ def show_sidebar():
             st.session_state['page'] = 'test_tdah'
             st.rerun()
         
+        if st.button("📚 Test de Lecture", key="nav_dyslexie"):
+            st.session_state['page'] = 'test_dyslexie'
+            st.rerun()
+        
+        if st.button("✍️ Test d'Écriture", key="nav_dysgraphie"):
+            st.session_state['page'] = 'test_dysgraphie'
+            st.rerun()
+        
+        st.markdown("---")
+        
+        # Boutons de navigation vers les résultats
         if 'dyscalculie_responses' in st.session_state and st.session_state['dyscalculie_responses']:
             if st.button("📊 Résultats Mathématiques", key="nav_res_dyscalculie"):
                 st.session_state['page'] = 'resultats_dyscalculie'
@@ -34,6 +46,16 @@ def show_sidebar():
         if 'tdah_responses' in st.session_state and st.session_state['tdah_responses']:
             if st.button("📈 Résultats Attention", key="nav_res_tdah"):
                 st.session_state['page'] = 'resultats_tdah'
+                st.rerun()
+        
+        if 'dyslexie_detailed_results' in st.session_state:
+            if st.button("📊 Résultats Lecture", key="nav_res_dyslexie"):
+                st.session_state['page'] = 'resultats_dyslexie'
+                st.rerun()
+        
+        if 'dysgraphie_responses' in st.session_state and st.session_state['dysgraphie_responses']:
+            if st.button("📈 Résultats Écriture", key="nav_res_dysgraphie"):
+                st.session_state['page'] = 'resultats_dysgraphie'
                 st.rerun()
         
         st.markdown("---")

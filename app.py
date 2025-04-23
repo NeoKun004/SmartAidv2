@@ -1,9 +1,12 @@
+# File path: app.py
 import streamlit as st
 from src.interface.styles import apply_styles
 from src.interface.sidebar import show_sidebar
 from src.interface.pages import home, questionnaire, test_selection, test_dyscalculie, test_tdah, results_dyscalculie, results_tdah
 import src.interface.pages.test_dyslexie as test_dyslexie
 import src.interface.pages.results_dyslexie as results_dyslexie
+import src.interface.pages.test_dysgraphie as test_dysgraphie
+import src.interface.pages.results_dysgraphie as results_dysgraphie
 
 # Configure the page
 st.set_page_config(
@@ -41,6 +44,10 @@ if 'questionnaire_responses' not in st.session_state:
     st.session_state['questionnaire_responses'] = None
 if 'suggested_test' not in st.session_state:
     st.session_state['suggested_test'] = None
+if 'dysgraphie_responses' not in st.session_state:
+    st.session_state['dysgraphie_responses'] = None
+if 'dysgraphie_analysis' not in st.session_state:
+    st.session_state['dysgraphie_analysis'] = None
 
 # Show sidebar
 show_sidebar()
@@ -58,9 +65,13 @@ elif st.session_state['page'] == 'test_tdah':
     test_tdah.show_page()
 elif st.session_state['page'] == 'test_dyslexie':
     test_dyslexie.show_page()
+elif st.session_state['page'] == 'test_dysgraphie':
+    test_dysgraphie.show_page()
 elif st.session_state['page'] == 'resultats_dyscalculie':
     results_dyscalculie.show_page()
 elif st.session_state['page'] == 'resultats_tdah':
     results_tdah.show_page()
 elif st.session_state['page'] == 'resultats_dyslexie':
     results_dyslexie.show_page()
+elif st.session_state['page'] == 'resultats_dysgraphie':
+    results_dysgraphie.show_page()
